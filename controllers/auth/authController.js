@@ -4,6 +4,9 @@ import {
   logoutService,
   refreshTokenService,
   authUserService,
+  changePasswordService,
+  forgotPasswordService,
+  resetPasswordService,
 } from '../../services/authService.js';
 
 const registerController = async (req, res, next) => {
@@ -85,10 +88,52 @@ const authUserController = async (req, res, next) => {
   }
 };
 
+// Đổi mật khẩu (dành cho người dùng đã đăng nhập)
+const changePasswordController = async (req, res, next) => {
+  try {
+    const userId = req.user.id;
+    const { oldPassword, newPassword } = req.body;
+
+    const result = await changePasswordService(userId, oldPassword, newPassword);
+
+    res.status(200).json({
+      success: true,
+      message: result.message,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Gửi yêu cầu quên mật khẩu
+const forgotPasswordController = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    const result = await forgotPasswordService(email);
+    res.status(200).json({ success: true, message: result.message });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Đặt lại mật khẩu mới
+const resetPasswordController = async (req, res, next) => {
+  try {
+    const { token, password } = req.body;
+    const result = await resetPasswordService(token, password);
+    res.status(200).json({ success: true, message: result.message });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export {
   registerController,
   loginController,
   logoutController,
   refreshTokenController,
   authUserController,
+  changePasswordController,
+  forgotPasswordController,
+  resetPasswordController,
 };
