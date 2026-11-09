@@ -5,6 +5,9 @@ import {
   logoutController,
   refreshTokenController,
   authUserController,
+  forgotPasswordController,
+  resetPasswordController,
+  changePasswordController,
 } from '../../controllers/auth/authController.js';
 import authMiddleware from '../../middlewares/authMiddleware.js';
 import guestMiddleware from '../../middlewares/guestMiddleware.js';
@@ -26,5 +29,12 @@ authRoutes.route('/logout').post(authMiddleware, logoutController);
 
 // [GET] /me - Lấy thông tin tài khoản hiện tại (yêu cầu Access Token)
 authRoutes.route('/me').get(authMiddleware, authUserController);
+
+authRoutes.route('/forgot-password').post(guestMiddleware, forgotPasswordController);
+
+authRoutes.route('/reset-password').post(guestMiddleware, resetPasswordController);
+
+// Đổi mật khẩu (yêu cầu Access Token)
+authRoutes.route('/change-password').post(authMiddleware, changePasswordController);
 
 export default authRoutes;

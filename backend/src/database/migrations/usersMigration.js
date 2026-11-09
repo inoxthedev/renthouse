@@ -10,13 +10,6 @@ const usersMigration = {
     maxlength: [50, 'Username must not exceed 50 characters'],
   },
 
-  fullName: {
-    type: String,
-    default: null,
-    trim: true,
-    maxlength: [100, 'Full name must not exceed 100 characters'],
-  },
-
   email: {
     type: String,
     required: [true, 'Email is required'],
