@@ -231,29 +231,26 @@ const forgotPasswordService = async (email) => {
 
 const changePasswordService = async (userId, oldPassword = '', newPassword = '') => {
   try {
-    // 1. Tìm người dùng theo userId lấy từ Token
+
     const isUser = await userModel.findById(userId);
     if (!isUser) {
       throw new ApiError(404, 'Người dùng không tồn tại!');
     }
 
-    // 2. So sánh mật khẩu cũ (bất đồng bộ)
     const isPassword = await bcrypt.compare(oldPassword, isUser.password);
     if (!isPassword) {
       throw new ApiError(400, 'Mật khẩu cũ không chính xác!');
     }
 
-    // 3. Kiểm tra mật khẩu mới không được trùng mật khẩu cũ
     if (oldPassword === newPassword) {
       throw new ApiError(400, 'Mật khẩu mới không được trùng với mật khẩu cũ!');
     }
 
-    // 4. Hash mật khẩu mới (bất đồng bộ) và lưu DB
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     isUser.password = hashedPassword;
     await isUser.save();
 
-    // 5. Xóa session trong Redis để vô hiệu hóa token cũ trên các thiết bị
+    // Xóa session trong Redis để vô hiệu hóa token cũ trên các thiết bị
     await redis.del(`refresh:${isUser._id}`);
 
     return {
@@ -274,13 +271,13 @@ const resetPasswordService = async (token = '', newPassword = '') => {
       throw new ApiError(400, 'Token và mật khẩu mới không được để trống!');
     }
 
-    // 1. Kiểm tra token có tồn tại trong Redis không
+    // Kiểm tra token có tồn tại trong Redis không
     const userId = await redis.get(`reset_password:${token}`);
     if (!userId) {
       throw new ApiError(400, 'Liên kết đặt lại mật khẩu không hợp lệ hoặc đã hết hạn!');
     }
 
-    // 2. Tìm người dùng trong DB
+    // Tìm người dùng trong DB
     const user = await userModel.findById(userId);
     if (!user) {
       throw new ApiError(404, 'Người dùng không tồn tại!');
@@ -290,15 +287,15 @@ const resetPasswordService = async (token = '', newPassword = '') => {
       throw new ApiError(403, 'Tài khoản của bạn đã bị khóa!');
     }
 
-    // 3. Hash mật khẩu mới và lưu vào DB
+    // Hash mật khẩu mới và lưu vào DB
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     user.password = hashedPassword;
     await user.save();
 
-    // 4. Xóa token trong Redis để link chỉ dùng được 1 lần
+    // Xóa token trong Redis để link chỉ dùng được 1 lần
     await redis.del(`reset_password:${token}`);
 
-    // 5. Hủy tất cả các phiên đăng nhập cũ trong Redis
+    // Hủy tất cả các phiên đăng nhập cũ trong Redis
     await redis.del(`refresh:${user._id}`);
 
     return {
