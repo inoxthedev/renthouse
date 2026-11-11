@@ -88,7 +88,6 @@ const authUserController = async (req, res, next) => {
   }
 };
 
-// Đổi mật khẩu (dành cho người dùng đã đăng nhập)
 const changePasswordController = async (req, res, next) => {
   try {
     const userId = req.user.id;
@@ -105,23 +104,28 @@ const changePasswordController = async (req, res, next) => {
   }
 };
 
-// Gửi yêu cầu quên mật khẩu
 const forgotPasswordController = async (req, res, next) => {
   try {
     const { email } = req.body;
     const result = await forgotPasswordService(email);
-    res.status(200).json({ success: true, message: result.message });
+    
+    res.status(200).json({ 
+      success: true, 
+      message: result.message 
+    });
   } catch (error) {
     next(error);
   }
 };
 
-// Đặt lại mật khẩu mới
 const resetPasswordController = async (req, res, next) => {
   try {
     const { token, password } = req.body;
     const result = await resetPasswordService(token, password);
-    res.status(200).json({ success: true, message: result.message });
+    res.status(200).json({ 
+      success: true, 
+      message: result.message 
+    });
   } catch (error) {
     next(error);
   }
