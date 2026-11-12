@@ -7,7 +7,7 @@ const Header = () => {
   const [isLanguageOpen, setIsLanguageOpen] = useState(false);
 
   return (
-    <header className="glass-header sticky top-0 z-50 w-full">
+    <header className="sticky top-0 z-50 w-full border-b border-gray-100 bg-white">
       <div className="mx-auto flex h-16 max-w-[1200px] items-center justify-between px-4 sm:px-6">
         {/* Logo */}
         <NavLink to="/" className="flex shrink-0 items-center gap-1">
@@ -19,38 +19,20 @@ const Header = () => {
         <nav
           className={`${
             isOpen ? 'flex' : 'hidden'
-          } absolute left-0 top-16 w-full flex-col gap-1 border-b border-gray-100 bg-white/95 p-4 backdrop-blur-xl md:static md:flex md:w-auto md:flex-row md:items-center md:gap-6 md:border-0 md:bg-transparent md:p-0 md:shadow-none md:backdrop-blur-none`}
-        >
-          <NavLink
-            to="/"
-            end
-            onClick={() => setIsOpen(false)}
-            className="px-2 py-2 text-sm font-medium text-black transition-colors hover:text-[#800000]"
-          >
+          } absolute left-0 top-16 w-full flex-col gap-1 border-b border-gray-100 bg-white/95 p-4 backdrop-blur-xl md:static md:flex md:w-auto md:flex-row md:items-center md:gap-6 md:border-0 md:bg-transparent md:p-0 md:shadow-none md:backdrop-blur-none`}>
+          <NavLink to="/" end onClick={() => setIsOpen(false)} className="px-2 py-2 text-sm font-medium text-black transition-colors hover:text-[#800000]">
             Trang chủ
           </NavLink>
 
-          <NavLink
-            to="#"
-            onClick={() => setIsOpen(false)}
-            className="px-2 py-2 text-sm font-medium text-black transition-colors hover:text-[#800000]"
-          >
+          <NavLink to="#" onClick={() => setIsOpen(false)} className="px-2 py-2 text-sm font-medium text-black transition-colors hover:text-[#800000]">
             Tìm phòng
           </NavLink>
 
-          <NavLink
-            to="#"
-            onClick={() => setIsOpen(false)}
-            className="px-2 py-2 text-sm font-medium text-black transition-colors hover:text-[#800000]"
-          >
+          <NavLink to="#" onClick={() => setIsOpen(false)} className="px-2 py-2 text-sm font-medium text-black transition-colors hover:text-[#800000]">
             Đăng tin
           </NavLink>
 
-          <NavLink
-            to="/about"
-            onClick={() => setIsOpen(false)}
-            className="px-2 py-2 text-sm font-medium text-black transition-colors hover:text-[#800000]"
-          >
+          <NavLink to="/about" onClick={() => setIsOpen(false)} className="px-2 py-2 text-sm font-medium text-black transition-colors hover:text-[#800000]">
             Giới thiệu
           </NavLink>
         </nav>
@@ -64,8 +46,7 @@ const Header = () => {
               onClick={() => setIsLanguageOpen((prev) => !prev)}
               className="flex items-center gap-1.5 rounded-lg px-2 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 hover:text-[#800000]"
               aria-label="Chọn ngôn ngữ"
-              aria-expanded={isLanguageOpen}
-            >
+              aria-expanded={isLanguageOpen}>
               <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5">
                 <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.7" />
                 <path
@@ -77,18 +58,8 @@ const Header = () => {
 
               {language}
 
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                className={`h-4 w-4 transition-transform ${isLanguageOpen ? 'rotate-180' : ''}`}
-              >
-                <path
-                  d="M6 9L12 15L18 9"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
+              <svg viewBox="0 0 24 24" fill="none" className={`h-4 w-4 transition-transform ${isLanguageOpen ? 'rotate-180' : ''}`}>
+                <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
 
@@ -103,8 +74,7 @@ const Header = () => {
                   }}
                   className={`flex w-full items-center justify-between px-4 py-2.5 text-sm transition hover:bg-gray-50 ${
                     language === 'VI' ? 'font-semibold text-[#800000]' : 'text-gray-600'
-                  }`}
-                >
+                  }`}>
                   Tiếng Việt
                   {language === 'VI' && <span>✓</span>}
                 </button>
@@ -117,8 +87,7 @@ const Header = () => {
                   }}
                   className={`flex w-full items-center justify-between px-4 py-2.5 text-sm transition hover:bg-gray-50 ${
                     language === 'EN' ? 'font-semibold text-[#800000]' : 'text-gray-600'
-                  }`}
-                >
+                  }`}>
                   English
                   {language === 'EN' && <span>✓</span>}
                 </button>
@@ -130,8 +99,7 @@ const Header = () => {
           <NavLink
             to="/"
             className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 text-gray-600 transition hover:border-[#800000] hover:text-[#800000]"
-            aria-label="Yêu thích"
-          >
+            aria-label="Yêu thích">
             <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5">
               <path
                 d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"
@@ -145,8 +113,7 @@ const Header = () => {
           {/* Login */}
           <NavLink
             to="/login"
-            className="rounded-full bg-[#800000] px-6 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:bg-[#600000] hover:shadow-md active:scale-95"
-          >
+            className="rounded-full bg-[#800000] px-6 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:bg-[#600000] hover:shadow-md active:scale-95">
             Đăng nhập
           </NavLink>
         </div>
@@ -157,8 +124,7 @@ const Header = () => {
           onClick={() => setIsOpen((prev) => !prev)}
           className="flex h-9 w-9 flex-col items-center justify-center gap-1 rounded-lg border border-gray-200 md:hidden"
           aria-label="Toggle navigation"
-          aria-expanded={isOpen}
-        >
+          aria-expanded={isOpen}>
           <span className="h-0.5 w-5 rounded bg-gray-700" />
           <span className="h-0.5 w-5 rounded bg-gray-700" />
           <span className="h-0.5 w-5 rounded bg-gray-700" />
