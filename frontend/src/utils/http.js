@@ -1,6 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { refreshTokenAPI } from '../apis/clients/auth';
+import { refreshTokenAPI } from '../apis/auth';
 
 const instance = axios.create({
   baseURL: import.meta.env.VITE_API_URL || '',
