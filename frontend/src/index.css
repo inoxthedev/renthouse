@@ -1,26 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap');
-
 @import 'tailwindcss';
 
 :root {
   --primary: #800000;
   --primary-dark: #600000;
-
   --background: #f8f3f0;
   --background-light: #fffaf7;
-
   --text-primary: #292524;
   --text-secondary: #78716c;
-
   --glass-bg: rgba(255, 255, 255, 0.4);
   --glass-border: rgba(255, 255, 255, 0.55);
-
   --glass-shadow: 0 4px 25px rgba(80, 30, 20, 0.05);
 }
-
-/* =========================================
-   GLOBAL BASE
-========================================= */
 
 @layer base {
   * {
@@ -39,8 +30,7 @@
 
     /* Nền chủ đạo toàn website */
     background:
-      radial-gradient(ellipse at 10% 5%, rgba(128, 0, 0, 0.07), transparent 40%),
-      radial-gradient(ellipse at 90% 45%, rgba(128, 0, 0, 0.045), transparent 45%),
+      radial-gradient(ellipse at 10% 5%, rgba(128, 0, 0, 0.07), transparent 40%), radial-gradient(ellipse at 90% 45%, rgba(128, 0, 0, 0.045), transparent 45%),
       linear-gradient(135deg, #fffaf7 0%, #f8f3f0 50%, #fdf6f2 100%);
 
     background-attachment: fixed;
@@ -62,10 +52,6 @@
     cursor: pointer;
   }
 }
-
-/* =========================================
-   GLASSMORPHISM COMPONENTS
-========================================= */
 
 @layer components {
   /* Header kính mờ */
@@ -103,4 +89,20 @@
     border: 1px solid rgba(255, 255, 255, 0.7);
     box-shadow: 0 8px 30px rgba(80, 30, 20, 0.06);
   }
+}
+
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-modal-in {
+  animation: modal-in 0.2s ease-out;
 }
