@@ -27,13 +27,7 @@
     min-height: 100vh;
     font-family: 'Be Vietnam Pro', sans-serif;
     color: var(--text-primary);
-
-    /* Nền chủ đạo toàn website */
-    background:
-      radial-gradient(ellipse at 10% 5%, rgba(128, 0, 0, 0.07), transparent 40%), radial-gradient(ellipse at 90% 45%, rgba(128, 0, 0, 0.045), transparent 45%),
-      linear-gradient(135deg, #fffaf7 0%, #f8f3f0 50%, #fdf6f2 100%);
-
-    background-attachment: fixed;
+    background: transparent;
   }
 
   #root {
