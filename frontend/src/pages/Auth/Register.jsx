@@ -30,8 +30,8 @@ const Register = () => {
     onSubmit: async (values) => {
       try {
         setIsLoading(true);
-        const { fullName, email, password } = values;
-        const response = await registerAPI(fullName.trim(), email.trim(), password);
+        const { userName, email, password } = values;
+        const response = await registerAPI(userName.trim(), email.trim(), password);
         showToast(response.data.message || 'Đăng ký tài khoản thành công!', 'success');
         formik.resetForm();
         navigate('/login');
