@@ -1,10 +1,9 @@
 import { useState } from 'react';
-import RoomGrid from '../components/layouts/RoomGrid';
 import { location, filters } from '../data/HomeData';
 
 const Home = () => {
   const [keyword, setKeyword] = useState('');
-  const [activeLocation, setActiveLocation] = useState('Tất cả');
+  const [activeLocation, setActiveLocation] = useState('');
 
   return (
     <main className="min-h-screen">
@@ -74,8 +73,7 @@ const Home = () => {
                 key={item}
                 type="button"
                 onClick={() => setActiveLocation(item)}
-                className={`shrink-0 whitespace-nowrap rounded-full border px-2.5 py-0.5 text-xs transition ${
-                  activeLocation === item
+                className={`shrink-0 whitespace-nowrap rounded-full border px-2.5 py-0.5 text-xs transition ${activeLocation === item
                     ? 'border-[#800000] bg-[#800000] text-white'
                     : 'border-[#e8caca] bg-[#800000]/[0.035] text-gray-600 hover:border-[#800000] hover:text-[#800000]'
                 }`}>
@@ -84,54 +82,6 @@ const Home = () => {
             ))}
           </div>
         </div>
-      </section>
-
-      <section className="mx-auto mt-6 max-w-6xl px-4 sm:px-6">
-        <div className="mb-3.5 flex items-center justify-between">
-          <h2 className="flex items-center gap-1.5 text-base font-bold text-gray-900">
-            <svg className="h-4 w-4 text-[#800000]" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" />
-            </svg>
-            Phòng nổi bật
-          </h2>
-          <button type="button" className="flex items-center gap-1 text-xs font-semibold text-[#800000] transition hover:text-red-700">
-            Xem tất cả <span>→</span>
-          </button>
-        </div>
-        <RoomGrid count={8} columns="grid-cols-2 sm:grid-cols-3 lg:grid-cols-4" />
-      </section>
-
-      <section className="mx-auto mt-8 max-w-6xl px-4 pb-10 sm:px-6">
-        <div className="mb-3.5 flex items-center justify-between gap-2">
-          <h2 className="flex items-center gap-1.5 text-base font-bold text-gray-900">
-            <svg className="h-4 w-4 shrink-0 text-[#800000]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z" />
-            </svg>
-            Được yêu thích nhiều nhất
-          </h2>
-          <div className="flex shrink-0 items-center gap-1.5">
-            <button
-              type="button"
-              aria-label="Phòng trước"
-              className="flex h-6 w-6 items-center justify-center rounded-full border border-gray-200 text-gray-500 transition hover:border-[#800000] hover:bg-red-50 hover:text-[#800000]">
-              <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="m15 18-6-6 6-6" />
-              </svg>
-            </button>
-            <button
-              type="button"
-              aria-label="Phòng tiếp theo"
-              className="flex h-6 w-6 items-center justify-center rounded-full border border-gray-200 text-gray-500 transition hover:border-[#800000] hover:bg-red-50 hover:text-[#800000]">
-              <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="m9 18 6-6-6-6" />
-              </svg>
-            </button>
-            <button type="button" className="ml-1 flex items-center gap-1 text-xs font-semibold text-[#800000] transition hover:text-red-700">
-              Xem tất cả <span>→</span>
-            </button>
-          </div>
-        </div>
-        <RoomGrid count={5} columns="grid-cols-2 sm:grid-cols-3 lg:grid-cols-5" />
       </section>
     </main>
   );

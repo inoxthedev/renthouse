@@ -1,49 +1,61 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { registerAPI } from '../../apis/auth';
+import { useToast } from '../../hooks/useToast';
 
 const Register = () => {
+  const navigate = useNavigate();
+  const { showToast } = useToast();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const [formData, setFormData] = useState({
-    fullName: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
+  const formik = useFormik({
+    initialValues: {
+      userName: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+    },
+
+    validationSchema: Yup.object({
+      userName: Yup.string().trim().required('Vui lòng nhập tên người dùng').min(3, 'Tên người dùng phải có ít nhất 3 ký tự').max(50, 'Tên người dùng không được vượt quá 50 ký tự'),
+      email: Yup.string().trim().email('Email không hợp lệ').required('Vui lòng nhập email'),
+      password: Yup.string().required('Vui lòng nhập mật khẩu').min(6, 'Mật khẩu phải có ít nhất 6 ký tự'),
+      confirmPassword: Yup.string().required('Vui lòng xác nhận mật khẩu').oneOf([Yup.ref('password')], 'Mật khẩu xác nhận không khớp'),
+    }),
+
+    onSubmit: async (values) => {
+      try {
+        setIsLoading(true);
+        const { userName, email, password } = values;
+        const response = await registerAPI(userName.trim(), email.trim(), password);
+        showToast(response.data.message || 'Đăng ký tài khoản thành công!', 'success');
+        formik.resetForm();
+        navigate('/login');
+      } catch (error) {
+        const message = error.response?.data?.message || 'Đăng ký thất bại. Vui lòng thử lại!';
+        showToast(message, 'error');
+      } finally {
+        setIsLoading(false);
+      }
+    },
   });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (formData.password !== formData.confirmPassword) {
-      return;
-    }
-
-    // TODO: Xử lý đăng ký API
-  };
 
   return (
     <main className="flex min-h-[calc(100vh-64px)] items-center justify-center bg-gray-50 px-4 py-10">
       <section className="w-full max-w-sm">
-        {/* Register Form Container */}
         <div className="rounded-xl border border-gray-200 bg-gray-100/80 p-6 sm:p-7">
-          {/* Heading */}
+          {/* Header */}
           <div className="mb-7 text-center">
             <h1 className="text-lg font-semibold text-gray-800">Đăng ký</h1>
             <p className="mt-1 text-sm text-gray-500">Tạo tài khoản để bắt đầu sử dụng</p>
           </div>
 
           {/* Register Form */}
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={formik.handleSubmit} className="space-y-4">
             {/* Full Name */}
             <div>
               <label htmlFor="fullName" className="mb-1.5 block text-sm font-medium text-gray-700">
@@ -55,11 +67,13 @@ const Register = () => {
                 name="fullName"
                 type="text"
                 placeholder="Nhập họ và tên"
-                value={formData.fullName}
-                onChange={handleChange}
-                required
+                value={formik.values.fullName}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
                 className="w-full rounded-md border border-gray-300 bg-white px-3 py-2.5 text-sm outline-none transition placeholder:text-gray-400 focus:border-[#800000] focus:ring-1 focus:ring-[#800000]"
               />
+
+              {formik.errors.fullName && formik.touched.fullName && <p className="mt-1 text-xs text-red-500">{formik.errors.fullName}</p>}
             </div>
 
             {/* Email */}
@@ -73,17 +87,19 @@ const Register = () => {
                 name="email"
                 type="email"
                 placeholder="example@email.com"
-                value={formData.email}
-                onChange={handleChange}
-                required
+                value={formik.values.email}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
                 className="w-full rounded-md border border-gray-300 bg-white px-3 py-2.5 text-sm outline-none transition placeholder:text-gray-400 focus:border-[#800000] focus:ring-1 focus:ring-[#800000]"
               />
+
+              {formik.errors.email && formik.touched.email && <p className="mt-1 text-xs text-red-500">{formik.errors.email}</p>}
             </div>
 
             {/* Password */}
             <div>
               <label htmlFor="password" className="mb-1.5 block text-sm font-medium text-gray-700">
-                Password <span className="text-red-500">*</span>
+                Mật khẩu <span className="text-red-500">*</span>
               </label>
 
               <div className="relative">
@@ -91,19 +107,18 @@ const Register = () => {
                   id="password"
                   name="password"
                   type={showPassword ? 'text' : 'password'}
-                  placeholder="Password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  required
+                  placeholder="Nhập mật khẩu"
+                  value={formik.values.password}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                   className="w-full rounded-md border border-gray-300 bg-white px-3 py-2.5 pr-11 text-sm outline-none transition placeholder:text-gray-400 focus:border-[#800000] focus:ring-1 focus:ring-[#800000]"
                 />
 
                 <button
                   type="button"
-                  onClick={() => setShowPassword(!showPassword)}
+                  onClick={() => setShowPassword((prev) => !prev)}
                   className="absolute inset-y-0 right-3 flex items-center text-gray-400 transition hover:text-gray-600"
-                  aria-label={showPassword ? 'Hide password' : 'Show password'}
-                >
+                  aria-label={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}>
                   {showPassword ? (
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" className="h-5 w-5">
                       <path d="M3 3l18 18" />
@@ -119,12 +134,14 @@ const Register = () => {
                   )}
                 </button>
               </div>
+
+              {formik.errors.password && formik.touched.password && <p className="mt-1 text-xs text-red-500">{formik.errors.password}</p>}
             </div>
 
             {/* Confirm Password */}
             <div>
               <label htmlFor="confirmPassword" className="mb-1.5 block text-sm font-medium text-gray-700">
-                Confirm Password <span className="text-red-500">*</span>
+                Xác nhận mật khẩu <span className="text-red-500">*</span>
               </label>
 
               <div className="relative">
@@ -132,19 +149,18 @@ const Register = () => {
                   id="confirmPassword"
                   name="confirmPassword"
                   type={showConfirmPassword ? 'text' : 'password'}
-                  placeholder="Confirm Password"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  required
+                  placeholder="Nhập lại mật khẩu"
+                  value={formik.values.confirmPassword}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                   className="w-full rounded-md border border-gray-300 bg-white px-3 py-2.5 pr-11 text-sm outline-none transition placeholder:text-gray-400 focus:border-[#800000] focus:ring-1 focus:ring-[#800000]"
                 />
 
                 <button
                   type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  onClick={() => setShowConfirmPassword((prev) => !prev)}
                   className="absolute inset-y-0 right-3 flex items-center text-gray-400 transition hover:text-gray-600"
-                  aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
-                >
+                  aria-label={showConfirmPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}>
                   {showConfirmPassword ? (
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" className="h-5 w-5">
                       <path d="M3 3l18 18" />
@@ -161,21 +177,19 @@ const Register = () => {
                 </button>
               </div>
 
-              {formData.confirmPassword && formData.password !== formData.confirmPassword && (
-                <p className="mt-1 text-xs text-red-500">Mật khẩu xác nhận không khớp</p>
-              )}
+              {formik.errors.confirmPassword && formik.touched.confirmPassword && <p className="mt-1 text-xs text-red-500">{formik.errors.confirmPassword}</p>}
             </div>
 
             {/* Submit */}
             <button
               type="submit"
-              className="w-full rounded-md bg-[#800000] py-2.5 text-sm font-semibold text-white transition hover:bg-[#600000] focus:outline-none focus:ring-2 focus:ring-[#800000] focus:ring-offset-2"
-            >
-              Đăng ký
+              disabled={isLoading}
+              className="w-full rounded-md bg-[#800000] py-2.5 text-sm font-semibold text-white transition hover:bg-[#600000] focus:outline-none focus:ring-2 focus:ring-[#800000] focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60">
+              {isLoading ? 'Đang đăng ký...' : 'Đăng ký'}
             </button>
           </form>
 
-          {/* Login */}
+          {/* Login Link */}
           <p className="mt-5 text-center text-sm text-gray-600">
             Đã có tài khoản?{' '}
             <Link to="/login" className="font-semibold text-[#800000] hover:underline">

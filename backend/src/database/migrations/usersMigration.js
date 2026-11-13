@@ -38,9 +38,8 @@ const usersMigration = {
   },
 
   role: {
-    type: String,
-    enum: ['user', 'partner', 'admin'],
-    default: 'user',
+    type: Boolean,
+    default: 0, // 0 user 1 admin
   },
 
   isEmailVerified: {
@@ -49,8 +48,8 @@ const usersMigration = {
   },
 
   plan: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'PricingPlan',
+    // type: mongoose.Schema.Types.ObjectId,
+    // ref: 'PricingPlan',
     default: null,
   },
 
@@ -67,6 +66,11 @@ const usersMigration = {
 
   lastLoginAt: {
     type: Date,
+    default: null,
+  },
+
+  googleId: {
+    type: String,
     default: null,
   },
 
