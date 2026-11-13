@@ -8,7 +8,7 @@ const GuestRoute = () => {
 
   useEffect(() => {
     if (info._id) {
-      navigate('/forbiden');
+      navigate('/forbidden');
     }
   }, [info, navigate]);
 
